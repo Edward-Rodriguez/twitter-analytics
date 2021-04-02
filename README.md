@@ -23,11 +23,11 @@ Program that compares political leader mentions on Twitter using historical and 
   - (P1) Compare Biden vs Trump hashtags
 
 - Pipeline
-  - AWS Pipeline with S3 and EMR
+  - (P1) AWS Pipeline with S3 and EMR
 
 ## Getting Started
 
-- coming soon ...
+coming soon ...
 
 ## Usage
 

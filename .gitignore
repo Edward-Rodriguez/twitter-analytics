@@ -36,4 +36,6 @@ project/plugins/project/
 # Ignore all local history of files
 .ionide
 
+keys.sh
+
 # End of https://www.toptal.com/developers/gitignore/api/scala,sbt,visualstudiocode,metals
