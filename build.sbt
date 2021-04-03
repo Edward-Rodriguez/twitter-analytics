@@ -13,5 +13,6 @@ libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-sql" % sparkVersion,
   // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk
   "com.amazonaws" % "aws-java-sdk-s3" % awsSdkS3Version,
-  "org.apache.hadoop" % "hadoop-aws" % hadoopAWSVersion
+  "org.apache.hadoop" % "hadoop-aws" % hadoopAWSVersion,
+  "com.typesafe" % "config" % "1.4.1"
 )
