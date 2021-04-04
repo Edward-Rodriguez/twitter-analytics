@@ -1,18 +1,11 @@
 name := "twitter-analytics"
 organization := "com.revature"
 version := "0.1"
-scalaVersion := "2.12.10"
-
-// Spark Information
-val sparkVersion = "3.1.1"
-val awsSdkS3Version = "1.11.990"
-val hadoopAWSVersion = "3.3.0"
+scalaVersion := "2.12.13"
 
 libraryDependencies ++= Seq(
-  "org.apache.spark" %% "spark-core" % sparkVersion,
-  "org.apache.spark" %% "spark-sql" % sparkVersion,
-  // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk
-  "com.amazonaws" % "aws-java-sdk-s3" % awsSdkS3Version,
-  "org.apache.hadoop" % "hadoop-aws" % hadoopAWSVersion,
+  "org.apache.spark" %% "spark-sql" % "3.0.1",
+  "com.amazonaws" % "aws-java-sdk-bundle" % "1.11.991",
+  "org.apache.hadoop" % "hadoop-aws" % "3.2.0",
   "com.typesafe" % "config" % "1.4.1"
 )

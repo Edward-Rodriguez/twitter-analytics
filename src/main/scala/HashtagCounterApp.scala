@@ -16,11 +16,14 @@ object HashtagCounterApp extends App {
   // set log level
   spark.sparkContext.setLogLevel("ERROR")
 
-  // Configuration to be able to use AWS s3a
   spark.sparkContext.hadoopConfiguration
     .set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
 
+  // Path to data in datalake folder on s3
+  val inputData = settings.dataLake + settings.inputFile
+  println("Bucket path =  " + inputData)
+
   // Load file from s3
-  val df = spark.read.json(settings.inputFile)
-  df.show()
+  val df = spark.read.option("multiline", "true").json(inputData)
+  df.printSchema()
 }
