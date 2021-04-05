@@ -35,7 +35,7 @@ coming soon ...
 
 ## References
 
-[Historical Twitter Dataset](https://archive.org/details/archiveteam-twitter-stream-2016-11)  
+[Historical Twitter Dataset](https://archive.org/details/archiveteam-twitter-stream-2020-11)  
 [Big Data Europe's standalone Apache Spark Cluster](https://github.com/big-data-europe/docker-spark)
 
 ## Contributors

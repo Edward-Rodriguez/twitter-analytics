@@ -1,5 +1,8 @@
 import org.apache.spark.sql.SparkSession
 import com.typesafe.config.{Config, ConfigFactory}
+import org.apache.spark.sql.types.{StructType, StructField}
+import org.apache.spark.sql.types.{ArrayType, StringType}
+import org.apache.spark.sql.functions.{explode, col}
 
 object HashtagCounterApp extends App {
   // Load configuration into Settings class
@@ -21,9 +24,31 @@ object HashtagCounterApp extends App {
 
   // Path to data in datalake folder on s3
   val inputData = settings.dataLake + settings.inputFile
-  println("Bucket path =  " + inputData)
 
+  // load custom schema for hashtags
+  val hashtagSchema = loadHashtagSchema()
   // Load file from s3
-  val df = spark.read.option("multiline", "true").json(inputData)
-  df.printSchema()
+  val df = spark.read
+    .format("json")
+    .option("mode", "FAILFAST")
+    .schema(hashtagSchema)
+    .load(inputData)
+    .select(explode(col("entities.hashtags.text")) as "hashtags")
+    .printSchema()
+
+  def loadHashtagSchema(): StructType = {
+    val hashtag = StructType(Array(StructField("text", StringType, false)))
+    val schema = StructType(
+      Array(
+        StructField(
+          "entities",
+          StructType(
+            Array(StructField("hashtags", ArrayType(hashtag, false), false))
+          ),
+          false
+        )
+      )
+    )
+    schema
+  }
 }
