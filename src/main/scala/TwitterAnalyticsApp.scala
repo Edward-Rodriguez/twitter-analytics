@@ -1,10 +1,8 @@
 import org.apache.spark.sql.SparkSession
 import com.typesafe.config.{Config, ConfigFactory}
-import org.apache.spark.sql.types.{StructType, StructField}
-import org.apache.spark.sql.types.{ArrayType, StringType}
 import org.apache.spark.sql.functions.{explode, col}
 
-object HashtagCounterApp extends App {
+object TwitterAnalyticsApp extends App {
   // Load configuration into Settings class
   val conf: Config = ConfigFactory.load()
   val settings: Settings = Settings(conf)
@@ -26,29 +24,18 @@ object HashtagCounterApp extends App {
   val inputData = settings.dataLake + settings.inputFile
 
   // load custom schema for hashtags
-  val hashtagSchema = loadHashtagSchema()
-  // Load file from s3
+  val hashtagUtil = HashtagsUtil
+  val hashtagSchema = hashtagUtil.loadHashtagSchema()
+
+  // Load file from s3 and convert to df (only select hashtags field)
   val df = spark.read
     .format("json")
     .option("mode", "FAILFAST")
     .schema(hashtagSchema)
     .load(inputData)
     .select(explode(col("entities.hashtags.text")) as "hashtags")
-    .printSchema()
+    .cache()
 
-  def loadHashtagSchema(): StructType = {
-    val hashtag = StructType(Array(StructField("text", StringType, false)))
-    val schema = StructType(
-      Array(
-        StructField(
-          "entities",
-          StructType(
-            Array(StructField("hashtags", ArrayType(hashtag, false), false))
-          ),
-          false
-        )
-      )
-    )
-    schema
-  }
+  val topHashtagsDF = hashtagUtil.getTopNHashtags(df, 20)
+  topHashtagsDF.show(false)
 }
