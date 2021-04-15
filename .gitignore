@@ -37,5 +37,6 @@ project/plugins/project/
 .ionide
 
 keys.sh
+src/main/resources/datalake
 
 # End of https://www.toptal.com/developers/gitignore/api/scala,sbt,visualstudiocode,metals

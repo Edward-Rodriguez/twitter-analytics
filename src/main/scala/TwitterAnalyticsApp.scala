@@ -11,7 +11,7 @@ object TwitterAnalyticsApp extends App {
   val spark = SparkSession
     .builder()
     .appName("Twitter-Analytics")
-    .master("local[*]")
+    // .master("local[*]")
     .getOrCreate()
 
   // set log level
@@ -23,6 +23,9 @@ object TwitterAnalyticsApp extends App {
   // Path to data in datalake folder on s3
   val inputData = settings.dataLake + settings.inputFile
 
+  // local test file
+  // val inputData = "spark/data/batch/30.json.bz2"
+
   // load custom schema for hashtags
   val hashtagUtil = HashtagsUtil
   val hashtagSchema = hashtagUtil.loadHashtagSchema()
@@ -30,7 +33,7 @@ object TwitterAnalyticsApp extends App {
   // Load file from s3 and convert to df (only select hashtags field)
   val df = spark.read
     .format("json")
-    .option("mode", "FAILFAST")
+    .option("mode", "PERMISSIVE")
     .schema(hashtagSchema)
     .load(inputData)
     .select(explode(col("entities.hashtags.text")) as "hashtags")
